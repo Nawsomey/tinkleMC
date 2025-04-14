@@ -4,9 +4,11 @@ import {
   getDatabase,
   ref,
   push,
-  onChildAdded
+  onChildAdded,
+  remove
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyB8C371TkySL1fi54nnFMztUhcqqpzhpok",
   authDomain: "diddle-58e73.firebaseapp.com",
@@ -18,12 +20,12 @@ const firebaseConfig = {
   measurementId: "G-FFZKW7X7KR"
 };
 
-// Init
+// Init Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const messagesRef = ref(db, "messages");
 
-// DOM
+// DOM Elements
 const messageForm = document.getElementById("message-form");
 const messageInput = document.getElementById("message-input");
 const messagesDiv = document.getElementById("messages");
@@ -86,7 +88,7 @@ onChildAdded(messagesRef, (snapshot) => {
 });
 
 // Admin modal logic
-const encryptedPassword = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd8d25e1b53e0d3ec41"; // hash for "password"
+const encryptedPassword = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd8d25e1b53e0d3ec41"; // SHA-256 hash for "password"
 const adminAccessBtn = document.getElementById("admin-access");
 const adminModal = document.getElementById("admin-modal");
 const verifyAdminBtn = document.getElementById("verify-admin");
@@ -101,7 +103,7 @@ closeAdminBtn.addEventListener("click", () => {
   adminModal.style.display = "none";
 });
 
-// Hash password
+// Hash password function
 async function hashPassword(password) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
