@@ -1,5 +1,6 @@
 // Firebase v9+ Modular SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { remove, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 import {
   getDatabase,
   ref,
