@@ -15,11 +15,26 @@
 
   <div id="chat-box" style="display: none;">
     <button id="dark-toggle">🌙 Dark Mode</button>
+    <button id="settings-toggle">⚙️ Settings</button>
     <div id="chat-messages"></div>
     <div id="chat-input">
       <input type="text" id="msg" placeholder="Type a message...">
       <button id="send">Send</button>
     </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal">
+    <h2>Settings</h2>
+    <label for="username-change">Change Username:</label>
+    <input type="text" id="username-change" placeholder="New username">
+    <button id="save-username-change">Save Username</button>
+
+    <label for="chat-color">Change Chat Color:</label>
+    <input type="color" id="chat-color" value="#ffffff">
+    <button id="save-chat-color">Save Color</button>
+
+    <button id="close-settings">Close</button>
   </div>
 </body>
 </html>
