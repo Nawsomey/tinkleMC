@@ -1,46 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>TinkleChat</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="script.js" defer></script>
 </head>
 <body>
-  <div id="chat-container">
-    <div id="settings-container">
-      <label>Username:
-        <input type="text" id="username" placeholder="Enter your username" />
-      </label>
-      <label>Background:
-        <input type="color" id="chat-bg-color" />
-      </label>
-      <label>Dark Mode:
-        <input type="checkbox" id="dark-mode-toggle" />
-      </label>
+  <!-- Password Login Overlay -->
+  <div id="login-overlay">
+    <div id="login-box">
+      <h2>Enter Password</h2>
+      <input type="password" id="login-password" placeholder="Password">
+      <button id="login-button">Login</button>
     </div>
-
-    <div id="messages"></div>
-
-    <form id="message-form">
-      <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off" />
-      <button type="submit">Send</button>
-    </form>
   </div>
 
-  <!-- Admin Access Button -->
-  <div id="admin-button">
-    <button id="admin-access">🔐</button>
+  <!-- Username Modal -->
+  <div id="username-modal">
+    <h2>Enter a username</h2>
+    <input type="text" id="username-input" placeholder="e.g. WatermelonEater69">
+    <button id="save-username">Continue</button>
   </div>
 
-  <!-- Admin Modal -->
-  <div id="admin-modal" class="modal" style="display: none;">
-    <h3>Enter Admin Password</h3>
-    <input type="password" id="admin-password" placeholder="••••••••" />
-    <button id="verify-admin">Verify</button>
-    <button id="close-admin">Close</button>
+  <!-- Chat Box -->
+  <div id="chat-box" style="display: none;">
+    <div id="chat-messages"></div>
+    <div id="chat-input">
+      <input type="text" id="msg" placeholder="Type a message...">
+      <button id="send">Send</button>
+    </div>
   </div>
 
-  <script type="module" src="script.js"></script>
+  <!-- Floating Control Buttons -->
+  <div id="floating-controls">
+    <button id="dark-toggle">🌙 Dark Mode</button>
+    <button id="settings-toggle">⚙️ Settings</button>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal">
+    <h2>Settings</h2>
+    <label for="username-change">Change Username:</label>
+    <input type="text" id="username-change" placeholder="New username">
+    <button id="save-username-change">Save Username</button>
+
+    <label for="chat-color">Change Background Color:</label>
+    <input type="color" id="chat-color" value="#ffffff">
+    <button id="save-chat-color">Save Color</button>
+
+    <button id="close-settings">Close</button>
+  </div>
 </body>
 </html>
