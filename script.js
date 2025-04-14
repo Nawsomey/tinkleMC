@@ -36,7 +36,7 @@ function showChat() {
   chatBoxContainer.style.display = "flex";
 }
 
-// Prompt for username if not already saved
+// Prompt for username
 if (!username) {
   usernameModal.style.display = "flex";
   saveUsername.onclick = () => {
@@ -51,17 +51,29 @@ if (!username) {
   showChat();
 }
 
-// UI references
+// UI elements
 const chatBox = document.getElementById("chat-messages");
 const msgInput = document.getElementById("msg");
 const sendBtn = document.getElementById("send");
 
-// Listen for new messages
+// Display incoming messages
 onChildAdded(msgRef, (data) => {
   const msg = data.val();
-  const p = document.createElement("p");
-  p.textContent = `${msg.username || "Guest"}: ${msg.text}`;
-  chatBox.appendChild(p);
+  const msgEl = document.createElement("div");
+  msgEl.className = "chat-message";
+
+  const avatar = document.createElement("img");
+  avatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(msg.username || "Guest")}&background=random&size=32`;
+  avatar.alt = "avatar";
+  avatar.className = "avatar";
+
+  const textEl = document.createElement("div");
+  textEl.className = "msg-content";
+  textEl.innerHTML = `<strong>${msg.username || "Guest"}:</strong> ${escapeHTML(msg.text)}`;
+
+  msgEl.appendChild(avatar);
+  msgEl.appendChild(textEl);
+  chatBox.appendChild(msgEl);
   chatBox.scrollTop = chatBox.scrollHeight;
 });
 
@@ -77,3 +89,10 @@ sendBtn.addEventListener("click", () => {
     msgInput.value = "";
   }
 });
+
+// Prevent script injection while allowing emojis
+function escapeHTML(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
