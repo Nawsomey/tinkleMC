@@ -29,6 +29,7 @@ const CHANNEL_NAME = 'chat_channel'; // The name of the video call channel
 const TOKEN = null; // You can generate a token for more security (Optional)
 let client;
 let localStream;
+let screenStream;
 let remoteStreams = [];
 
 // Username logic
@@ -75,6 +76,8 @@ const closeSettingsBtn = document.getElementById("close-settings");
 const startVideoCallBtn = document.getElementById("start-video-call");
 const videoCallModal = document.getElementById("video-call-modal");
 const endCallBtn = document.getElementById("end-call");
+const startScreenShareBtn = document.getElementById("start-screen-share");
+const stopScreenShareBtn = document.getElementById("stop-screen-share");
 
 // Display incoming messages
 onChildAdded(msgRef, (data) => {
@@ -213,7 +216,7 @@ function startVideoCall() {
   });
 }
 
-// End call
+// End Call
 endCallBtn.addEventListener("click", () => {
   localStream.close();
   remoteStreams.forEach((stream) => {
@@ -223,4 +226,34 @@ endCallBtn.addEventListener("click", () => {
     console.log("Left the channel");
     videoCallModal.style.display = "none";
   });
+});
+
+// Start Screen Share
+startScreenShareBtn.addEventListener("click", () => {
+  AgoraRTC.getDisplayMedia().then((stream) => {
+    screenStream = stream;
+    screenStream.init(() => {
+      console.log("Screen sharing started");
+      localStream.close(); // Close local video
+      localStream = screenStream; // Use screen stream as local stream
+      localStream.play("local-stream");
+
+      client.publish(localStream, (err) => {
+        console.error("Publish screen share error: " + err);
+      });
+
+      startScreenShareBtn.style.display = "none";
+      stopScreenShareBtn.style.display = "block"; // Show stop button
+    });
+  }).catch((err) => {
+    console.error("Screen sharing failed: ", err);
+  });
+});
+
+// Stop Screen Share
+stopScreenShareBtn.addEventListener("click", () => {
+  screenStream.close();
+  startScreenShareBtn.style.display = "block";
+  stopScreenShareBtn.style.display = "none";
+  startVideoCall(); // Reinitialize the video call with local video
 });
