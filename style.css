@@ -153,3 +153,15 @@ body.dark #chat-input button:hover {
 body.dark #dark-toggle {
   background: #444;
 }
+
+#mic-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+#mic-btn.recording {
+  background: #a71d2a;
+}
