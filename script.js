@@ -163,3 +163,12 @@ saveChatColorBtn.addEventListener("click", () => {
   document.body.style.backgroundColor = chatColor; // Apply color to the chat background
   settingsModal.style.display = "none";
 });
+
+// UI elements
+const clearChatBtn = document.getElementById("clear-chat");
+
+// Clear chat messages
+clearChatBtn.addEventListener("click", () => {
+  chatBox.innerHTML = ""; // Clear the chat messages container
+});
+
