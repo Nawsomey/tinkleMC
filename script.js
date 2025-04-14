@@ -21,131 +21,111 @@ const firebaseConfig = {
 // Init
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const msgRef = ref(db, "messages");
+const messagesRef = ref(db, "messages");
 
-// Username logic
-let username = localStorage.getItem("chat-username");
-let chatColor = localStorage.getItem("chat-color") || "#ffffff"; // Default to white if no color is set
+// DOM
+const messageForm = document.getElementById("message-form");
+const messageInput = document.getElementById("message-input");
+const messagesDiv = document.getElementById("messages");
+const usernameInput = document.getElementById("username");
+const chatBgColorInput = document.getElementById("chat-bg-color");
+const darkModeToggle = document.getElementById("dark-mode-toggle");
 
-const usernameModal = document.getElementById("username-modal");
-const usernameInput = document.getElementById("username-input");
-const saveUsername = document.getElementById("save-username");
-const chatBoxContainer = document.getElementById("chat-box");
+let username = localStorage.getItem("chat-username") || "Guest";
+usernameInput.value = username;
 
-function showChat() {
-  usernameModal.style.display = "none";
-  chatBoxContainer.style.display = "flex";
-}
-
-// Prompt for username
-if (!username) {
-  usernameModal.style.display = "flex";
-  saveUsername.onclick = () => {
-    const input = usernameInput.value.trim();
-    if (input !== "") {
-      username = input;
-      localStorage.setItem("chat-username", username);
-      showChat();
-    }
-  };
-} else {
-  showChat();
-}
-
-// UI elements
-const chatBox = document.getElementById("chat-messages");
-const msgInput = document.getElementById("msg");
-const sendBtn = document.getElementById("send");
-const darkToggle = document.getElementById("dark-toggle");
-const settingsToggle = document.getElementById("settings-toggle");
-const settingsModal = document.getElementById("settings-modal");
-const usernameChangeInput = document.getElementById("username-change");
-const saveUsernameChangeBtn = document.getElementById("save-username-change");
-const chatColorInput = document.getElementById("chat-color");
-const saveChatColorBtn = document.getElementById("save-chat-color");
-const closeSettingsBtn = document.getElementById("close-settings");
-
-// Display incoming messages
-onChildAdded(msgRef, (data) => {
-  const msg = data.val();
-  const msgEl = document.createElement("div");
-  msgEl.className = "chat-message";
-
-  const avatar = document.createElement("img");
-  avatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(msg.username || "Guest")}&background=random&size=32`;
-  avatar.alt = "avatar";
-  avatar.className = "avatar";
-
-  const textEl = document.createElement("div");
-  textEl.className = "msg-content";
-  textEl.innerHTML = `<strong>${msg.username || "Guest"}:</strong> ${escapeHTML(msg.text)}`;
-
-  msgEl.appendChild(avatar);
-  msgEl.appendChild(textEl);
-  chatBox.appendChild(msgEl);
-  chatBox.scrollTop = chatBox.scrollHeight;
+usernameInput.addEventListener("input", () => {
+  username = usernameInput.value;
+  localStorage.setItem("chat-username", username);
 });
+
+chatBgColorInput.addEventListener("input", () => {
+  messagesDiv.style.backgroundColor = chatBgColorInput.value;
+  localStorage.setItem("chat-bg", chatBgColorInput.value);
+});
+
+darkModeToggle.addEventListener("change", () => {
+  document.body.classList.toggle("dark-mode", darkModeToggle.checked);
+  localStorage.setItem("dark-mode", darkModeToggle.checked);
+});
+
+// Load preferences
+const savedBg = localStorage.getItem("chat-bg");
+if (savedBg) {
+  chatBgColorInput.value = savedBg;
+  messagesDiv.style.backgroundColor = savedBg;
+}
+
+const savedDark = localStorage.getItem("dark-mode");
+if (savedDark === "true") {
+  darkModeToggle.checked = true;
+  document.body.classList.add("dark-mode");
+}
 
 // Send message
-sendBtn.addEventListener("click", () => {
-  const text = msgInput.value.trim();
-  if (text !== "") {
-    push(msgRef, {
-      username: username || "Guest",
-      text: text,
-      timestamp: Date.now()
+messageForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const text = messageInput.value.trim();
+  if (text) {
+    push(messagesRef, {
+      user: username || "Guest",
+      text,
+      time: Date.now()
     });
-    msgInput.value = "";
+    messageInput.value = "";
   }
 });
 
-// Prevent script injection while allowing emojis
-function escapeHTML(text) {
-  const div = document.createElement("div");
-  div.textContent = text;
-  return div.innerHTML;
+// Display messages
+onChildAdded(messagesRef, (snapshot) => {
+  const msg = snapshot.val();
+  const p = document.createElement("p");
+  p.textContent = `[${msg.user}] ${msg.text}`;
+  messagesDiv.appendChild(p);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+});
+
+// Admin modal logic
+const encryptedPassword = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd8d25e1b53e0d3ec41"; // hash for "password"
+const adminAccessBtn = document.getElementById("admin-access");
+const adminModal = document.getElementById("admin-modal");
+const verifyAdminBtn = document.getElementById("verify-admin");
+const closeAdminBtn = document.getElementById("close-admin");
+const adminPasswordInput = document.getElementById("admin-password");
+
+adminAccessBtn.addEventListener("click", () => {
+  adminModal.style.display = "block";
+});
+
+closeAdminBtn.addEventListener("click", () => {
+  adminModal.style.display = "none";
+});
+
+// Hash password
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-// Dark mode toggle
+verifyAdminBtn.addEventListener("click", async () => {
+  const input = adminPasswordInput.value;
+  const hashed = await hashPassword(input);
 
-const isDark = localStorage.getItem("chat-darkmode") === "true";
-
-if (isDark) {
-  document.body.classList.add("dark");
-  darkToggle.textContent = "☀️ Light Mode";
-}
-
-darkToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-  const isNowDark = document.body.classList.contains("dark");
-  darkToggle.textContent = isNowDark ? "☀️ Light Mode" : "🌙 Dark Mode";
-  localStorage.setItem("chat-darkmode", isNowDark);
-});
-
-// Settings modal behavior
-settingsToggle.addEventListener("click", () => {
-  settingsModal.style.display = "block";
-});
-
-closeSettingsBtn.addEventListener("click", () => {
-  settingsModal.style.display = "none";
-});
-
-// Change username
-saveUsernameChangeBtn.addEventListener("click", () => {
-  const newUsername = usernameChangeInput.value.trim();
-  if (newUsername !== "") {
-    username = newUsername;
-    localStorage.setItem("chat-username", username);
-    settingsModal.style.display = "none";
+  if (hashed === encryptedPassword) {
+    const choice = confirm("Access granted. Do you want to delete the chat history?");
+    if (choice) {
+      await remove(ref(db, "messages"));
+      alert("Chat history deleted.");
+    } else {
+      alert("Save feature not implemented yet.");
+    }
+  } else {
+    alert("Incorrect password.");
   }
-});
 
-// Change chat color
-saveChatColorBtn.addEventListener("click", () => {
-  const newColor = chatColorInput.value;
-  chatColor = newColor;
-  localStorage.setItem("chat-color", chatColor);
-  document.body.style.backgroundColor = chatColor; // Apply color to the chat background
-  settingsModal.style.display = "none";
+  adminModal.style.display = "none";
+  adminPasswordInput.value = "";
 });
