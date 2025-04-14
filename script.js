@@ -54,7 +54,7 @@ if (!username) {
 // UI elements
 const chatBox = document.getElementById("chat-messages");
 const msgInput = document.getElementById("msg");
-const sendBtn = document.getElementById("send");
+const sendBtn = document.getElementById("send-btn");
 
 // Display incoming messages
 onChildAdded(msgRef, (data) => {
