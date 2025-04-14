@@ -8,6 +8,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  position: relative; /* Ensure the parent body is the reference for absolute positioning */
 }
 
 #chat-box {
@@ -19,22 +20,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-}
-
-#chat-header {
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px;
-  background-color: #007bff;
-}
-
-#dark-toggle, #settings-toggle {
-  border: none;
-  background: none;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  margin-left: 10px;
+  position: relative; /* Chat box itself is positioned normally */
 }
 
 #chat-messages {
@@ -139,4 +125,25 @@ button {
 #settings-modal input[type="text"], 
 #settings-modal input[type="color"] {
   margin: 10px 0;
+}
+
+/* Position the toggle buttons at the top-right corner */
+#dark-toggle, #settings-toggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+#dark-toggle {
+  right: 50px; /* To prevent overlap with settings button */
+}
+
+#settings-toggle {
+  right: 10px;
 }
