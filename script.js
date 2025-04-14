@@ -118,20 +118,29 @@ const micBtn = document.getElementById("mic-btn");
 let mediaRecorder;
 let chunks = [];
 
+const micBtn = document.getElementById("mic-btn");
+const recordingTimer = document.getElementById("recording-timer");
+const timerText = document.getElementById("timer-text");
+
+let mediaRecorder;
+let chunks = [];
+let timerInterval;
+let seconds = 0;
+
 micBtn.addEventListener("click", async () => {
   if (!mediaRecorder || mediaRecorder.state === "inactive") {
-    // Start recording
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorder = new MediaRecorder(stream);
+      chunks = [];
+      seconds = 0;
 
       mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
 
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunks, { type: 'audio/webm' });
-        chunks = [];
-
         const audioURL = URL.createObjectURL(blob);
+
         const audio = document.createElement("audio");
         audio.controls = true;
         audio.src = audioURL;
@@ -155,14 +164,25 @@ micBtn.addEventListener("click", async () => {
 
       mediaRecorder.start();
       micBtn.classList.add("recording");
-      micBtn.textContent = "⏹️"; // Stop icon
+      micBtn.textContent = "⏹️";
+      recordingTimer.style.display = "flex";
+
+      timerInterval = setInterval(() => {
+        seconds++;
+        const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
+        const secs = String(seconds % 60).padStart(2, "0");
+        timerText.textContent = `${mins}:${secs}`;
+      }, 1000);
+
     } catch (err) {
       alert("Microphone access denied.");
     }
   } else {
-    // Stop recording
     mediaRecorder.stop();
     micBtn.classList.remove("recording");
     micBtn.textContent = "🎤";
+    clearInterval(timerInterval);
+    recordingTimer.style.display = "none";
   }
 });
+
