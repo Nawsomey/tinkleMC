@@ -7,6 +7,7 @@ body {
   height: 100vh;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 #chat-box {
@@ -18,6 +19,22 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+#chat-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  background-color: #007bff;
+}
+
+#dark-toggle, #settings-toggle {
+  border: none;
+  background: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 10px;
 }
 
 #chat-messages {
