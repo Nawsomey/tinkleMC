@@ -23,6 +23,14 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const msgRef = ref(db, "messages");
 
+// Agora Variables
+const APP_ID = 'bae869fe99d04983a685bff04807a303';  // Replace with your Agora App ID
+const CHANNEL_NAME = 'chat_channel'; // The name of the video call channel
+const TOKEN = null; // You can generate a token for more security (Optional)
+let client;
+let localStream;
+let remoteStreams = [];
+
 // Username logic
 let username = localStorage.getItem("chat-username");
 let chatColor = localStorage.getItem("chat-color") || "#ffffff"; // Default to white if no color is set
@@ -64,6 +72,9 @@ const saveUsernameChangeBtn = document.getElementById("save-username-change");
 const chatColorInput = document.getElementById("chat-color");
 const saveChatColorBtn = document.getElementById("save-chat-color");
 const closeSettingsBtn = document.getElementById("close-settings");
+const startVideoCallBtn = document.getElementById("start-video-call");
+const videoCallModal = document.getElementById("video-call-modal");
+const endCallBtn = document.getElementById("end-call");
 
 // Display incoming messages
 onChildAdded(msgRef, (data) => {
@@ -147,4 +158,69 @@ saveChatColorBtn.addEventListener("click", () => {
   localStorage.setItem("chat-color", chatColor);
   document.body.style.backgroundColor = chatColor; // Apply color to the chat background
   settingsModal.style.display = "none";
+});
+
+// Start Video Call
+startVideoCallBtn.addEventListener("click", () => {
+  startVideoCall();
+});
+
+// Initialize Agora client
+function startVideoCall() {
+  videoCallModal.style.display = "block";
+  client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+
+  client.init(APP_ID, () => {
+    console.log("AgoraRTC client initialized");
+
+    client.join(TOKEN, CHANNEL_NAME, null, (uid) => {
+      console.log("User " + uid + " joined the channel");
+
+      // Create local stream
+      localStream = AgoraRTC.createStream({
+        streamID: uid,
+        audio: true,
+        video: true,
+        screen: false,
+      });
+
+      localStream.init(() => {
+        console.log("Local stream initialized");
+        localStream.play("local-stream");
+
+        // Publish the local stream
+        client.publish(localStream, (err) => {
+          console.error("Publish local stream error: " + err);
+        });
+      });
+
+      // Set up remote stream handler
+      client.on("stream-added", (evt) => {
+        const stream = evt.stream;
+        console.log("New stream added: " + stream.getId());
+        client.subscribe(stream, (err) => {
+          console.error("Stream subscription error: " + err);
+        });
+      });
+
+      client.on("stream-subscribed", (evt) => {
+        const remoteStream = evt.stream;
+        console.log("Remote stream subscribed: " + remoteStream.getId());
+        remoteStreams.push(remoteStream);
+        remoteStream.play("remote-streams");
+      });
+    });
+  });
+}
+
+// End call
+endCallBtn.addEventListener("click", () => {
+  localStream.close();
+  remoteStreams.forEach((stream) => {
+    stream.close();
+  });
+  client.leave(() => {
+    console.log("Left the channel");
+    videoCallModal.style.display = "none";
+  });
 });
