@@ -3,22 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TinkleChat</title>
+  <title>Tinkle Chat</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Chat Box -->
   <div id="chat-box">
     <div id="messages"></div>
     <form id="message-form">
       <input type="text" id="message-input" placeholder="Type a message..." required>
       <button type="submit">Send</button>
     </form>
-    <div id="chat-settings">
+  </div>
+
+  <!-- Floating Controls (Settings Button) -->
+  <div id="floating-controls">
+    <button id="settings-btn">Settings</button>
+  </div>
+
+  <!-- Chat Settings Panel -->
+  <div id="chat-settings">
+    <h3>Chat Settings</h3>
+    <div>
+      <label for="username">Username:</label>
       <input type="text" id="username" placeholder="Enter your name">
+    </div>
+    <div>
+      <label for="chat-bg-color">Background Color:</label>
       <input type="color" id="chat-bg-color">
-      <label for="dark-mode-toggle">Dark Mode</label>
+    </div>
+    <div>
+      <label for="dark-mode-toggle">Dark Mode:</label>
       <input type="checkbox" id="dark-mode-toggle">
     </div>
+    <button id="close-settings">Close</button>
   </div>
 
   <!-- Admin Modal -->
@@ -27,10 +45,6 @@
     <input type="password" id="admin-password" placeholder="Enter Admin Password">
     <button id="verify-admin">Verify</button>
     <button id="close-admin">Close</button>
-  </div>
-
-  <div id="floating-controls">
-    <button id="admin-access">Admin Access</button>
   </div>
 
   <script type="module" src="app.js"></script>
