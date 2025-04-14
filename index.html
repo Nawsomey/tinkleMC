@@ -7,22 +7,26 @@
   <script type="module" src="script.js" defer></script>
 </head>
 <body>
+  <!-- Username Modal -->
   <div id="username-modal">
     <h2>Enter a username</h2>
-    <input type="text" id="username-input" placeholder="e.g. CoolKid42">
+    <input type="text" id="username-input" placeholder="e.g. WatermelonEater69">
     <button id="save-username">Continue</button>
   </div>
 
+  <!-- Chat Box -->
   <div id="chat-box" style="display: none;">
-    <div id="chat-header">
-      <button id="dark-toggle">🌙 Dark Mode</button>
-      <button id="settings-toggle">⚙️ Settings</button>
-    </div>
     <div id="chat-messages"></div>
     <div id="chat-input">
       <input type="text" id="msg" placeholder="Type a message...">
       <button id="send">Send</button>
     </div>
+  </div>
+
+  <!-- Floating Control Buttons -->
+  <div id="floating-controls">
+    <button id="dark-toggle">🌙 Dark Mode</button>
+    <button id="settings-toggle">⚙️ Settings</button>
   </div>
 
   <!-- Settings Modal -->
