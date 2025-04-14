@@ -5,7 +5,6 @@
   <title>Chat Widget</title>
   <link rel="stylesheet" href="style.css">
   <script type="module" src="script.js" defer></script>
-  <script src="https://cdn.agora.io/sdk/web/AgoraRTCSDK-4.7.0.js"></script> <!-- Include Agora SDK -->
 </head>
 <body>
   <div id="username-modal">
@@ -18,7 +17,6 @@
     <div id="chat-header">
       <button id="dark-toggle">🌙 Dark Mode</button>
       <button id="settings-toggle">⚙️ Settings</button>
-      <button id="start-video-call">📹 Video Call</button> <!-- Video call button -->
     </div>
     <div id="chat-messages"></div>
     <div id="chat-input">
@@ -39,18 +37,6 @@
     <button id="save-chat-color">Save Color</button>
 
     <button id="close-settings">Close</button>
-  </div>
-
-  <!-- Video Call Modal -->
-  <div id="video-call-modal" class="modal" style="display: none;">
-    <h2>Video Call</h2>
-    <div id="video-container">
-      <div id="local-stream"></div> <!-- Local video -->
-      <div id="remote-streams"></div> <!-- Remote video -->
-    </div>
-    <button id="end-call">End Call</button>
-    <button id="start-screen-share">Start Screen Share</button> <!-- Screen share button -->
-    <button id="stop-screen-share" style="display: none;">Stop Screen Share</button> <!-- Stop screen share button -->
   </div>
 </body>
 </html>
