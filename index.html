@@ -2,62 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TinkleChat</title>
   <link rel="stylesheet" href="style.css">
-  <script type="module" src="script.js" defer></script>
 </head>
 <body>
-  <!-- Username Prompt (First-time user) -->
-  <div id="username-modal">
-    <h2>Enter a username</h2>
-    <input type="text" id="username-input" placeholder="e.g. WatermelonEater69">
-    <button id="save-username">Continue</button>
-  </div>
-
-  <!-- Chat Box -->
-  <div id="chat-box" style="display: none;">
-    <div id="chat-messages"></div>
-    <div id="chat-input">
-      <input type="text" id="msg" placeholder="Type a message...">
-      <button id="send">Send</button>
+  <div id="chat-box">
+    <div id="messages"></div>
+    <form id="message-form">
+      <input type="text" id="message-input" placeholder="Type a message..." required>
+      <button type="submit">Send</button>
+    </form>
+    <div id="chat-settings">
+      <input type="text" id="username" placeholder="Enter your name">
+      <input type="color" id="chat-bg-color">
+      <label for="dark-mode-toggle">Dark Mode</label>
+      <input type="checkbox" id="dark-mode-toggle">
     </div>
   </div>
 
-  <!-- Floating Control Buttons -->
+  <!-- Admin Modal -->
+  <div id="admin-modal">
+    <h2>Admin Access</h2>
+    <input type="password" id="admin-password" placeholder="Enter Admin Password">
+    <button id="verify-admin">Verify</button>
+    <button id="close-admin">Close</button>
+  </div>
+
   <div id="floating-controls">
-    <button id="dark-toggle">🌙 Dark Mode</button>
-    <button id="settings-toggle">⚙️ Settings</button>
-    <!-- Admin button for password-protected features -->
-    <button id="admin-toggle">🔒 Admin Settings</button>
+    <button id="admin-access">Admin Access</button>
   </div>
 
-  <!-- Settings Modal (Available to all users) -->
-  <div id="settings-modal" class="modal">
-    <h2>Settings</h2>
-    <label for="username-change">Change Username:</label>
-    <input type="text" id="username-change" placeholder="New username">
-    <button id="save-username-change">Save Username</button>
-
-    <label for="chat-color">Change Background Color:</label>
-    <input type="color" id="chat-color" value="#ffffff">
-    <button id="save-chat-color">Save Color</button>
-
-    <button id="close-settings">Close</button>
-  </div>
-
-  <!-- Admin Password Modal (for admin-only functionality) -->
-  <div id="admin-password-modal" class="modal">
-    <h2>Enter Admin Password</h2>
-    <input type="password" id="admin-password-input" placeholder="Enter password">
-    <button id="admin-password-submit">Submit</button>
-    <button id="close-password-modal">Cancel</button>
-  </div>
-
-  <!-- Admin Modal (for chat history management) -->
-  <div id="admin-settings-modal" class="modal">
-    <h2>Admin Settings</h2>
-    <button id="delete-chat-history">Delete Chat History</button>
-    <button id="close-admin-settings">Close</button>
-  </div>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
