@@ -121,7 +121,7 @@ button {
   display: none;
 }
 
-#settings-modal input[type="text"], 
+#settings-modal input[type="text"],
 #settings-modal input[type="color"] {
   margin: 10px 0;
 }
@@ -148,4 +148,50 @@ button {
 
 #floating-controls button:hover {
   background-color: #0056b3;
+}
+
+/* Password login overlay styles */
+#login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#login-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  width: 300px;
+}
+
+#login-box h2 {
+  margin-bottom: 20px;
+}
+
+#login-box input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+#login-box button {
+  padding: 10px 20px;
+  background: #28a745;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+}
+
+#login-box button:hover {
+  background: #218838;
 }
