@@ -1,4 +1,3 @@
-// Firebase v9+ Modular SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
   getDatabase,
@@ -33,6 +32,18 @@ const usernameInput = document.getElementById("username");
 const chatBgColorInput = document.getElementById("chat-bg-color");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
 
+const settingsBtn = document.getElementById("settings-btn");
+const settingsPanel = document.getElementById("chat-settings");
+const closeSettingsBtn = document.getElementById("close-settings");
+
+const adminModal = document.getElementById("admin-modal");
+const adminPasswordInput = document.getElementById("admin-password");
+const verifyAdminBtn = document.getElementById("verify-admin");
+const closeAdminBtn = document.getElementById("close-admin");
+
+// Admin password hash (SHA-256) for "your-admin-password"
+const encryptedAdminPassword = "2c6ee24b09816a6f14f95d1698b24ead"; // This is the SHA-256 hash of "your-admin-password"
+
 let username = localStorage.getItem("chat-username") || "Guest";
 usernameInput.value = username;
 
@@ -64,6 +75,50 @@ if (savedDark === "true") {
   document.body.classList.add("dark-mode");
 }
 
+// Toggle settings panel
+settingsBtn.addEventListener("click", () => {
+  settingsPanel.style.display = settingsPanel.style.display === "block" ? "none" : "block";
+});
+
+// Close settings panel
+closeSettingsBtn.addEventListener("click", () => {
+  settingsPanel.style.display = "none";
+});
+
+// Open admin modal when clicking on settings button (if it's an admin)
+settingsBtn.addEventListener("click", () => {
+  // Check if the user is an admin before opening settings
+  adminModal.style.display = "block";  // Show admin modal for password input
+});
+
+// Close admin modal
+closeAdminBtn.addEventListener("click", () => {
+  adminModal.style.display = "none";
+});
+
+// Hash password function
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+// Verify admin password
+verifyAdminBtn.addEventListener("click", async () => {
+  const enteredPassword = adminPasswordInput.value;
+  const hashedPassword = await hashPassword(enteredPassword);
+
+  if (hashedPassword === encryptedAdminPassword) {
+    // Password matches, grant access to settings panel
+    adminModal.style.display = "none";  // Close admin modal
+    settingsPanel.style.display = "block";  // Open settings panel
+  } else {
+    alert("Incorrect password. Access denied.");
+  }
+});
+
 // Send message
 messageForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -85,49 +140,4 @@ onChildAdded(messagesRef, (snapshot) => {
   p.textContent = `[${msg.user}] ${msg.text}`;
   messagesDiv.appendChild(p);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
-});
-
-// Admin modal logic
-const encryptedPassword = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd8d25e1b53e0d3ec41"; // SHA-256 hash for "password"
-const adminAccessBtn = document.getElementById("admin-access");
-const adminModal = document.getElementById("admin-modal");
-const verifyAdminBtn = document.getElementById("verify-admin");
-const closeAdminBtn = document.getElementById("close-admin");
-const adminPasswordInput = document.getElementById("admin-password");
-
-adminAccessBtn.addEventListener("click", () => {
-  adminModal.style.display = "block";
-});
-
-closeAdminBtn.addEventListener("click", () => {
-  adminModal.style.display = "none";
-});
-
-// Hash password function
-async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
-verifyAdminBtn.addEventListener("click", async () => {
-  const input = adminPasswordInput.value;
-  const hashed = await hashPassword(input);
-
-  if (hashed === encryptedPassword) {
-    const choice = confirm("Access granted. Do you want to delete the chat history?");
-    if (choice) {
-      await remove(ref(db, "messages"));
-      alert("Chat history deleted.");
-    } else {
-      alert("Save feature not implemented yet.");
-    }
-  } else {
-    alert("Incorrect password.");
-  }
-
-  adminModal.style.display = "none";
-  adminPasswordInput.value = "";
 });
