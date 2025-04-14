@@ -7,7 +7,13 @@
   <script type="module" src="script.js" defer></script>
 </head>
 <body>
-  <div id="chat-box">
+  <div id="username-modal">
+    <h2>Enter a username</h2>
+    <input type="text" id="username-input" placeholder="e.g. CoolKid42">
+    <button id="save-username">Continue</button>
+  </div>
+
+  <div id="chat-box" style="display: none;">
     <div id="chat-messages"></div>
     <div id="chat-input">
       <input type="text" id="msg" placeholder="Type a message...">
