@@ -96,3 +96,19 @@ function escapeHTML(text) {
   div.textContent = text;
   return div.innerHTML;
 }
+
+// Dark mode toggle
+const darkToggle = document.getElementById("dark-toggle");
+const isDark = localStorage.getItem("chat-darkmode") === "true";
+
+if (isDark) {
+  document.body.classList.add("dark");
+  darkToggle.textContent = "☀️ Light Mode";
+}
+
+darkToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  const isNowDark = document.body.classList.contains("dark");
+  darkToggle.textContent = isNowDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+  localStorage.setItem("chat-darkmode", isNowDark);
+});
