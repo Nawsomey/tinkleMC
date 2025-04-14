@@ -24,15 +24,6 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const msgRef = ref(db, "messages");
 
-
-
-
-
-
-
-
-
-
 // Username logic
 let username = localStorage.getItem("chat-username");
 let chatColor = localStorage.getItem("chat-color") || "#ffffff"; // Default to white if no color is set
@@ -41,6 +32,15 @@ const usernameModal = document.getElementById("username-modal");
 const usernameInput = document.getElementById("username-input");
 const saveUsername = document.getElementById("save-username");
 const chatBoxContainer = document.getElementById("chat-box");
+
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
 
 function showChat() {
   usernameModal.style.display = "none";
@@ -74,10 +74,7 @@ const saveUsernameChangeBtn = document.getElementById("save-username-change");
 const chatColorInput = document.getElementById("chat-color");
 const saveChatColorBtn = document.getElementById("save-chat-color");
 const closeSettingsBtn = document.getElementById("close-settings");
-
-
-
-
+const adminPasswordHash = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8";
 
 
 // Display incoming messages
@@ -169,7 +166,20 @@ saveChatColorBtn.addEventListener("click", () => {
 const clearChatBtn = document.getElementById("clear-chat");
 
 // Clear chat messages
-clearChatBtn.addEventListener("click", () => {
-  chatBox.innerHTML = ""; // Clear the chat messages container
-});
+clearChatBtn.addEventListener("click", async () => {
+  const input = prompt("Enter admin password to clear chat:");
+  if (!input) return;
 
+  const hashedInput = await hashPassword(input);
+  if (hashedInput === adminPasswordHash) {
+    // Clear UI
+    chatBox.innerHTML = "";
+
+    // Clear from Firebase
+    set(msgRef, null);
+
+    alert("Chat cleared!");
+  } else {
+    alert("Incorrect password.");
+  }
+});
