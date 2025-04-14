@@ -1,19 +1,15 @@
-/* General Styles */
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
   margin: 0;
   padding: 0;
   display: flex;
-  height: 100vh;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
-  position: relative;
-  transition: background-color 0.3s ease;
+  height: 100vh;
 }
 
-/* Chatbox */
 #chat-box {
   width: 400px;
   height: 500px;
@@ -23,180 +19,111 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
-#chat-messages {
+#messages {
   flex: 1;
   padding: 10px;
   overflow-y: auto;
   background: #f9f9f9;
-  border-bottom: 1px solid #ddd;
 }
 
-#chat-input {
+#message-form {
   display: flex;
   border-top: 1px solid #ccc;
-  background: #fff;
 }
 
-#chat-input input {
+#message-input {
   flex: 1;
   border: none;
   padding: 10px;
   font-size: 14px;
-  border-radius: 5px;
-  box-sizing: border-box;
 }
 
-#chat-input button {
+#message-form button {
   border: none;
   padding: 10px 15px;
   background: #007bff;
   color: white;
   cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
 }
 
-#chat-input button:hover {
+#message-form button:hover {
   background: #0056b3;
 }
 
-/* Modal for Username */
-#username-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-#username-modal input {
-  padding: 10px;
-  font-size: 16px;
+/* Settings Panel */
+#chat-settings {
+  display: none; /* Hidden by default */
+  padding: 20px;
+  background: #fff;
+  border-top: 1px solid #ccc;
+  width: 400px;
+  text-align: left;
   margin-top: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
 }
 
-#username-modal button {
-  padding: 10px 15px;
-  background: #28a745;
+#chat-settings h3 {
+  margin-bottom: 10px;
+}
+
+#chat-settings input {
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+#chat-settings label {
+  font-weight: bold;
+}
+
+#chat-settings button {
+  padding: 10px;
+  background-color: #007bff;
   color: white;
   border: none;
   cursor: pointer;
-  border-radius: 5px;
+  margin-top: 10px;
 }
 
-#username-modal button:hover {
-  background: #218838;
-}
-
-/* Chat Message */
-.chat-message {
-  display: flex;
-  margin-bottom: 10px;
-}
-
-.avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.msg-content {
-  background-color: #e4e4e4;
-  padding: 5px;
-  border-radius: 5px;
-  max-width: 80%;
-}
-
-/* Dark Mode */
-.dark {
-  background-color: #333;
-  color: white;
-}
-
-.dark #chat-box {
-  background: #444;
-}
-
-.dark #chat-messages {
-  background: #555;
-}
-
-.dark #chat-input {
-  background: #666;
-}
-
-.dark .msg-content {
-  background-color: #666;
-  color: white;
-}
-
-button {
-  cursor: pointer;
+#chat-settings button:hover {
+  background-color: #0056b3;
 }
 
 /* Admin Modal */
 #admin-modal {
   position: fixed;
-  top: 20%;
-  left: 20%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
   display: none;
-  z-index: 1001;
 }
 
-#admin-modal input[type="password"] {
-  margin: 10px 0;
+#admin-modal input {
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 #admin-modal button {
-  background-color: #007bff;
+  padding: 10px 20px;
+  background: #28a745;
   color: white;
-  border: none;
-  padding: 10px 15px;
   font-size: 16px;
+  border: none;
   border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
 }
 
 #admin-modal button:hover {
-  background-color: #0056b3;
+  background: #218838;
 }
 
-/* Settings Modal */
-#settings-modal {
-  position: fixed;
-  top: 20%;
-  left: 20%;
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  display: none;
-}
-
-#settings-modal input[type="text"],
-#settings-modal input[type="color"] {
-  margin: 10px 0;
-}
-
-/* Floating Controls */
 #floating-controls {
   position: fixed;
   top: 20px;
@@ -204,7 +131,6 @@ button {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 1002;
 }
 
 #floating-controls button {
@@ -222,50 +148,7 @@ button {
   background-color: #0056b3;
 }
 
-/* Password login overlay styles */
-#login-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-#login-box {
-  background: #fff;
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  width: 300px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-#login-box h2 {
-  margin-bottom: 20px;
-}
-
-#login-box input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  margin: 10px 0;
-  border-radius: 5px;
-}
-
-#login-box button {
-  padding: 10px 20px;
-  background: #28a745;
+.dark {
+  background-color: #333;
   color: white;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-}
-
-#login-box button:hover {
-  background: #218838;
 }
