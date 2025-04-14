@@ -23,6 +23,34 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const msgRef = ref(db, "messages");
 
+// Username logic
+let username = localStorage.getItem("chat-username");
+
+const usernameModal = document.getElementById("username-modal");
+const usernameInput = document.getElementById("username-input");
+const saveUsername = document.getElementById("save-username");
+const chatBoxContainer = document.getElementById("chat-box");
+
+function showChat() {
+  usernameModal.style.display = "none";
+  chatBoxContainer.style.display = "flex";
+}
+
+// Prompt for username if not already saved
+if (!username) {
+  usernameModal.style.display = "flex";
+  saveUsername.onclick = () => {
+    const input = usernameInput.value.trim();
+    if (input !== "") {
+      username = input;
+      localStorage.setItem("chat-username", username);
+      showChat();
+    }
+  };
+} else {
+  showChat();
+}
+
 // UI references
 const chatBox = document.getElementById("chat-messages");
 const msgInput = document.getElementById("msg");
@@ -42,7 +70,7 @@ sendBtn.addEventListener("click", () => {
   const text = msgInput.value.trim();
   if (text !== "") {
     push(msgRef, {
-      username: "Guest",
+      username: username || "Guest",
       text: text,
       timestamp: Date.now()
     });
