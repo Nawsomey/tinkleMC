@@ -80,3 +80,24 @@ body {
   border: none;
   cursor: pointer;
 }
+
+.chat-message {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.msg-content {
+  background: #e9e9e9;
+  padding: 8px 12px;
+  border-radius: 10px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
