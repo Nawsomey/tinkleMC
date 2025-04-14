@@ -7,16 +7,7 @@
   <script type="module" src="script.js" defer></script>
 </head>
 <body>
-  <!-- Password Login Overlay -->
-  <div id="login-overlay">
-    <div id="login-box">
-      <h2>Enter Password</h2>
-      <input type="password" id="login-password" placeholder="Password">
-      <button id="login-button">Login</button>
-    </div>
-  </div>
-
-  <!-- Username Modal -->
+  <!-- Username Prompt (First-time user) -->
   <div id="username-modal">
     <h2>Enter a username</h2>
     <input type="text" id="username-input" placeholder="e.g. WatermelonEater69">
@@ -36,9 +27,11 @@
   <div id="floating-controls">
     <button id="dark-toggle">🌙 Dark Mode</button>
     <button id="settings-toggle">⚙️ Settings</button>
+    <!-- Admin button for password-protected features -->
+    <button id="admin-toggle">🔒 Admin Settings</button>
   </div>
 
-  <!-- Settings Modal -->
+  <!-- Settings Modal (Available to all users) -->
   <div id="settings-modal" class="modal">
     <h2>Settings</h2>
     <label for="username-change">Change Username:</label>
@@ -50,6 +43,21 @@
     <button id="save-chat-color">Save Color</button>
 
     <button id="close-settings">Close</button>
+  </div>
+
+  <!-- Admin Password Modal (for admin-only functionality) -->
+  <div id="admin-password-modal" class="modal">
+    <h2>Enter Admin Password</h2>
+    <input type="password" id="admin-password-input" placeholder="Enter password">
+    <button id="admin-password-submit">Submit</button>
+    <button id="close-password-modal">Cancel</button>
+  </div>
+
+  <!-- Admin Modal (for chat history management) -->
+  <div id="admin-settings-modal" class="modal">
+    <h2>Admin Settings</h2>
+    <button id="delete-chat-history">Delete Chat History</button>
+    <button id="close-admin-settings">Close</button>
   </div>
 </body>
 </html>
